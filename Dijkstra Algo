@@ -1,0 +1,32 @@
+    // It gives the array of elements representing shortest distance from the source 'src' given in parameter .
+    
+    
+    vector<long long> dijkstra(vector<vector<vector<int> > >& adj,int src){
+        int n = adj.size();
+        vector<long long> dist(n);
+        for(int i = 0 ; i < n ; i++){
+            dist[i] = 1e18;
+        }
+        dist[src] = 0;
+        priority_queue<pair<long long,int> , vector<pair<long long,int> > , greater<pair<long long,int> > > pq;
+        pq.push({0 , src});
+        while(!pq.empty()){
+            pair<long long,int> cur = pq.top();
+            pq.pop();
+            int vt = cur.second;
+            long long dist_to_vt = cur.first;
+            if(dist[vt] != dist_to_vt){
+                continue;
+            }
+
+            for(auto nbr : adj[vt]){
+                int nxt_vt = nbr[0];
+                long long dist_to_nxt = nbr[1];
+                if(dist[nxt_vt] > dist[vt] + dist_to_nxt){
+                    dist[nxt_vt] = dist[vt] + dist_to_nxt ;
+                    pq.push({dist[vt] + dist_to_nxt , nxt_vt});
+                }
+            }
+        }
+        return dist;
+    }
